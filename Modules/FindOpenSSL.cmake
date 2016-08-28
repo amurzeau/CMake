@@ -133,6 +133,13 @@ if(WIN32 AND NOT CYGWIN)
       set(_OPENSSL_MSVC_RT_MODE "MD")
     endif ()
 
+    # Since OpenSSL 1.1, lib names are like libcrypto32MTd.lib and libssl32MTd.lib
+    if( "${CMAKE_SIZEOF_VOID_P}" STREQUAL "8" )
+        set(_OPENSSL_MSVC_ARCH_SUFFIX "64")
+    else()
+        set(_OPENSSL_MSVC_ARCH_SUFFIX "32")
+    endif()
+
     if(OPENSSL_USE_STATIC_LIBS)
       set(_OPENSSL_PATH_SUFFIXES
         "lib"
@@ -150,7 +157,9 @@ if(WIN32 AND NOT CYGWIN)
     find_library(LIB_EAY_DEBUG
       NAMES
         libeay32${_OPENSSL_MSVC_RT_MODE}d
+        libcrypto${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}d
         libeay32d
+        libcryptod
       NAMES_PER_DIR
       ${_OPENSSL_ROOT_HINTS_AND_PATHS}
       PATH_SUFFIXES
@@ -160,7 +169,9 @@ if(WIN32 AND NOT CYGWIN)
     find_library(LIB_EAY_RELEASE
       NAMES
         libeay32${_OPENSSL_MSVC_RT_MODE}
+        libcrypto${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}
         libeay32
+        libcrypto
       NAMES_PER_DIR
       ${_OPENSSL_ROOT_HINTS_AND_PATHS}
       PATH_SUFFIXES
@@ -170,7 +181,9 @@ if(WIN32 AND NOT CYGWIN)
     find_library(SSL_EAY_DEBUG
       NAMES
         ssleay32${_OPENSSL_MSVC_RT_MODE}d
+        libssl${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}d
         ssleay32d
+        libssld
       NAMES_PER_DIR
       ${_OPENSSL_ROOT_HINTS_AND_PATHS}
       PATH_SUFFIXES
@@ -180,8 +193,10 @@ if(WIN32 AND NOT CYGWIN)
     find_library(SSL_EAY_RELEASE
       NAMES
         ssleay32${_OPENSSL_MSVC_RT_MODE}
+        libssl${_OPENSSL_MSVC_ARCH_SUFFIX}${_OPENSSL_MSVC_RT_MODE}
         ssleay32
         ssl
+        libssl
       NAMES_PER_DIR
       ${_OPENSSL_ROOT_HINTS_AND_PATHS}
       PATH_SUFFIXES
